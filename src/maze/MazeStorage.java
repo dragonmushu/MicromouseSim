@@ -1,13 +1,11 @@
 package maze;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.util.ArrayList;
 
 public class MazeStorage {
 	private ArrayList <Maze> mazes; //stores the different mazes
-	private Reader reader;
-	
+
 	//array of maze names
 	private String [] mazeNames;
 	
@@ -20,15 +18,10 @@ public class MazeStorage {
 		
 		//add new mazes
 		try{
-			FileReader reader = new FileReader("Stored Maze");
-			BufferedReader br = new BufferedReader(reader);
-			String line;
-			while ((line=br.readLine())!=null){
-				if (line.equals("")) continue;
-				mazes.add(new Reader(line).initializeMaze());
-			}
-			br.close();
-			
+			File [] files = new File("src/storedmazes").listFiles();
+			for(File f: files){
+				mazes.add(new Reader(f.getName()).initializeMaze());
+			}			
 		}
 		catch(Exception e){
 			e.printStackTrace();

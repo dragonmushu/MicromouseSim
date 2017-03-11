@@ -1,3 +1,13 @@
+/**
+ * Mouse Action: Move
+ * moves the mouse n steps ahead
+ * move direction is the same direction
+ * that the mouse is facing when this MouseAction
+ * is instantiated
+ * 
+ * @author Akshay
+ */
+
 package mouseaction;
 
 import mouse.Mouse;
@@ -25,17 +35,33 @@ public class Move extends MouseAction{
 	private double xVelocity;
 	private double yVelocity;
 	
+	/**
+	 * 
+	 * @param mouse Mouse object used to control Mouse motion
+	 */
 	public Move (Mouse mouse) {
 		super (mouse);
 		steps = 1;
 		
 	}
 	
+	/**
+	 * 
+	 * @param mouse Mouse object used to control Mouse motion
+	 * @param steps the number of steps to move forward
+	 */
 	public Move (Mouse mouse, int steps){
 		super (mouse);
 		this.steps = steps;
 	}
 	
+	/**
+	 * called when it is "this" turn in the MouseAction
+	 * list within the Mouse object
+	 * 
+	 * Make sure the current position and angle are used
+	 * before the update functions start updating position
+	 */
 	public void init () {
 		//x and y velocity
 		yVelocity = mouse.getVelocity()*Math.sin(Math.toRadians(mouse.getAngle()));
@@ -69,7 +95,6 @@ public class Move extends MouseAction{
 	}
 	
 	
-
 	@Override
 	public void update(float dt) {
 		// TODO Auto-generated method stub
@@ -90,11 +115,12 @@ public class Move extends MouseAction{
 			else yDistTraveled = yDist;
 		}
 		
+		//sets the position
 		mouse.setX(origX+(int)xDistTraveled);
 		mouse.setY(origY+(int)yDistTraveled);
 		
 		
-		
+		//after mouse is at position updates row and col
 		if ((int)Math.abs(xDistTraveled) == xDist && (int)Math.abs(yDistTraveled) == yDist){
 			switch (mouse.getAngle()){
 			case 0: 

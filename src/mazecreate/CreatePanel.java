@@ -1,3 +1,9 @@
+/**
+ * Panel that allows Maze Creating
+ * 
+ * @author Akshay Ben
+ */
+
 package mazecreate;
 
 import static gui.GUIPanel.BUTTON_HEIGHT;
@@ -11,9 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -45,7 +51,9 @@ public class CreatePanel extends JPanel implements MouseListener{
 	
 	
 	/**
+	 * Instantiates a new CreatePanel
 	 * 
+	 * Allows user to create new file 
 	 */
 	public CreatePanel () {
 		//initialize dimensions and panel
@@ -99,7 +107,10 @@ public class CreatePanel extends JPanel implements MouseListener{
 
 	
 	/**
+	 * Updated every time user changes the GUI components
+	 * or activates the GUI components
 	 * 
+	 * draws the rectangles to allow user to specify rectangles to choose
 	 */
 	public void paintComponent(Graphics g) {
 		
@@ -177,10 +188,10 @@ public class CreatePanel extends JPanel implements MouseListener{
 		
 		//create new file
 		try {
-			Files.write(Paths.get(fileName+".txt"), lines, StandardCharsets.UTF_8);
+			Files.write(Paths.get("src","storedmazes",fileName+".txt"), lines, StandardCharsets.UTF_8);
 			saveFileName(fileName);
 		}
-		catch (Exception e) {
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 		
@@ -193,16 +204,11 @@ public class CreatePanel extends JPanel implements MouseListener{
 	 */
 	public boolean fileNameExists (String fileName){
 		try{
-			FileReader reader = new FileReader("Stored Maze");
-			BufferedReader br = new BufferedReader (reader);
-			String line;
-			while ((line=br.readLine())!=null){
-				if (line.equals(fileName)){
-					br.close();
-					return true;
-				}
+			File [] files = new File("src/storedmazes").listFiles();
+			for (File f: files){
+				String name = f.getName();
+				if (name.substring(0, name.length()-4).equals(fileName)) return true;
 			}
-			br.close();
 		}
 		catch (Exception e){
 			e.printStackTrace();
@@ -217,7 +223,7 @@ public class CreatePanel extends JPanel implements MouseListener{
 	public void saveFileName (String fileName){
 		try{
 			FileWriter writer = new FileWriter("Stored Maze", true);
-			writer.append(fileName+"\n");
+			writer.append("\n"+fileName+"\n");
 			writer.close();
 		}
 		catch (Exception e){

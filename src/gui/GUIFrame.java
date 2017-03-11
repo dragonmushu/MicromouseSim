@@ -22,9 +22,9 @@ import algorithms.Algorithm;
 @SuppressWarnings("serial")
 public class GUIFrame extends JFrame{
 	
-	public GUIFrame (Algorithm algo) {
+	public GUIFrame () {
 		setTitle ("Maze Simulator");
-		setContentPane(new GUIPanel(this, algo));
+		setContentPane(new GUIPanel(this));
 		pack();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(true);

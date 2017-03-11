@@ -18,8 +18,8 @@ import mouseaction.MouseAction;
 public class Mouse {
 	
 	//row and col
-	private int row;
-	private int col;
+	private double row;
+	private double col;
 	
 	
 	//maze
@@ -67,8 +67,8 @@ public class Mouse {
 		image = icon.getImage();
 		
 		//x and y position
-		x =col*CELL_SIZE + CELL_SIZE/2 - MOUSE_WIDTH/2;
-		y = row*CELL_SIZE + CELL_SIZE/2 - MOUSE_HEIGHT/2;
+		x =(int)col*CELL_SIZE + CELL_SIZE/2 - MOUSE_WIDTH/2;
+		y = (int)row*CELL_SIZE + CELL_SIZE/2 - MOUSE_HEIGHT/2;
 		
 		//angle
 		angle = 270;
@@ -102,7 +102,7 @@ public class Mouse {
 	 * 
 	 * @return the row of the mouse
 	 */
-	public int getRow () { return row; }
+	public double getRow () { return row; }
 	
 	/**
 	 * 
@@ -111,7 +111,7 @@ public class Mouse {
 	 * 
 	 * @return the col of the mouse
 	 */
-	public int getCol () { return col; }
+	public double getCol () { return col; }
 	
 	/**
 	 * 
@@ -158,13 +158,13 @@ public class Mouse {
 	 * 
 	 * @param r the row of the mouse in the maze
 	 */
-	public void setRow (int r){ this.row = r; }
+	public void setRow (double r){ this.row = r; }
 	
 	/**
 	 * 
 	 * @param c the col of the mouse in the maze
 	 */
-	public void setCol (int c) { this.col = c;}
+	public void setCol (double c) { this.col = c;}
 	
 	/**
 	 * 
@@ -278,37 +278,87 @@ public class Mouse {
 	
 	/**
 	 * 
+	 * WILL THROW ERROR IF MOUSE IS INBETWEEN CELLS
+	 * 
 	 * @return true if there is a wall directly in front of the mouse
 	 */
 	public boolean frontWall (){
-		if (angle == 270 && maze.getCell(row, col).getUp()) return true;
-		else if (angle == 0 && maze.getCell(row, col).getRight()) return true;
-		else if (angle == 90 && maze.getCell(row, col).getDown()) return true;
-		else if (angle == 180 && maze.getCell(row, col).getLeft()) return true;
+		if (angle == 270 && maze.getCell((int) row, (int) col).getUp()) return true;
+		else if (angle == 0 && maze.getCell((int) row, (int) col).getRight()) return true;
+		else if (angle == 90 && maze.getCell((int) row, (int) col).getDown()) return true;
+		else if (angle == 180 && maze.getCell((int) row, (int) col).getLeft()) return true;
 		else return false;
 	}
 	
 	/**
+	 * WILL THROW ERROR IF MOUSE IS INBETWEEN CELLS
 	 * 
 	 * @return true if there is a wall on the left of the mouse
 	 */
 	public boolean leftWall () {
-		if (angle == 180 && maze.getCell(row, col).getDown()) return true;
-		else if (angle == 90 && maze.getCell(row, col).getRight()) return true;
-		else if (angle == 0 && maze.getCell(row, col).getUp()) return true;
-		else if (angle == 270 && maze.getCell(row, col).getLeft()) return true;
+		if (angle == 180 && maze.getCell((int) row, (int) col).getDown()) return true;
+		else if (angle == 90 && maze.getCell((int) row, (int) col).getRight()) return true;
+		else if (angle == 0 && maze.getCell((int) row, (int) col).getUp()) return true;
+		else if (angle == 270 && maze.getCell((int) row, (int) col).getLeft()) return true;
 		else return false;
 	}
 	
 	/**
+	 * WILL THROW ERROR IF MOUSE IS INBETWEEN CELLS
 	 * 
 	 * @return true if there is a wall on the right of the mouse
 	 */
 	public boolean rightWall (){
-		if (angle == 0 && maze.getCell(row, col).getDown()) return true;
-		else if (angle == 270 && maze.getCell(row, col).getRight()) return true;
-		else if (angle == 180 && maze.getCell(row, col).getDown()) return true;
-		else if (angle == 90 && maze.getCell(row, col).getLeft()) return true;
+	
+		
+		if (angle == 0 && maze.getCell((int) row, (int) col).getDown()) return true;
+		else if (angle == 270 && maze.getCell((int) row, (int) col).getRight()) return true;
+		else if (angle == 180 && maze.getCell((int) row, (int) col).getUp()) return true;
+		else if (angle == 90 && maze.getCell((int) row, (int) col).getLeft()) return true;
 		else return false;
+	}
+	
+	/**
+	 * USED FOR DEBUGGING
+	 */
+	
+	/**
+	 * 
+	 * @param r row
+	 * @param c column
+	 * @return true if wall at specified location
+	 */
+	public boolean mazeRightWall (int r, int c) {
+		return maze.getCell(r, c).getRight();
+	}
+	
+	/**
+	 * 
+	 * @param r row
+	 * @param c column
+	 * @return true if wall at specified location
+	 */
+	public boolean mazeLeftWall (int r, int c) {
+		return maze.getCell(r, c).getLeft();
+	}
+	
+	/**
+	 * 
+	 * @param r row
+	 * @param c column
+	 * @return true if wall at specified location
+	 */
+	public boolean mazeTopWall (int r, int c) {
+		return maze.getCell(r, c).getUp();
+	}
+	
+	/**
+	 * 
+	 * @param r row
+	 * @param c column
+	 * @return true if wall at specified location
+	 */
+	public boolean mazeDownWall (int r, int c) {
+		return maze.getCell(r, c).getDown();
 	}
 }

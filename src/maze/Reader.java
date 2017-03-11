@@ -17,8 +17,8 @@ public class Reader {
 	}
 	
 	public Reader (String fileName){
-		this.fileName = fileName;
-		File file = new File(fileName+".txt");
+		this.fileName = fileName.substring(0, fileName.length()-4);
+		File file = new File("src/storedmazes/"+fileName);
 		try {
 			textReader = new Scanner(file); 
 		}

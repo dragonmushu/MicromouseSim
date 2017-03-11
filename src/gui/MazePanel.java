@@ -10,6 +10,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -39,6 +41,9 @@ public class MazePanel extends JPanel implements Runnable{
 	
 	//Algorithm
 	private Algorithm algorithm;
+	private ArrayList <Algorithm> allAlgorithms;
+	private ArrayList <String> algoNames;
+	private JComboBox <String> algorithmList;
 	
 	//Maze
 	private MazeStorage storage;
@@ -63,7 +68,7 @@ public class MazePanel extends JPanel implements Runnable{
 	/**
 	 * This 
 	 */
-	public MazePanel (MazeStorage storage, Algorithm algo){
+	public MazePanel (MazeStorage storage){
 		
 		//set size and initialize
 		setPreferredSize (new Dimension(GUIPanel.WIDTH, GUIPanel.HEIGHT));
@@ -80,7 +85,7 @@ public class MazePanel extends JPanel implements Runnable{
 		mazeList.setForeground(Color.RED);
 		mazeList.setBorder(new LineBorder(Color.RED, 5, true));
 		int width = GUIPanel.HEIGHT+(GUIPanel.WIDTH - GUIPanel.HEIGHT - COMBOBOX_WIDTH)/2;
-		mazeList.setBounds(width, GUIPanel.HEIGHT/2-COMBOBOX_HEIGHT/2+50, COMBOBOX_WIDTH, COMBOBOX_HEIGHT);
+		mazeList.setBounds(width, GUIPanel.HEIGHT/2-COMBOBOX_HEIGHT/2+100, COMBOBOX_WIDTH, COMBOBOX_HEIGHT);
 		mazeList.addActionListener(new ActionListener() {
 			
 			@Override
@@ -104,8 +109,54 @@ public class MazePanel extends JPanel implements Runnable{
 		mouse = new Mouse(maze);
 		
 		//algorithm
-		algorithm = algo;
+		allAlgorithms = new ArrayList<Algorithm>();
+		algoNames = new ArrayList<String>();
+		try{
+			File [] algoFiles = new File("src/algorithms").listFiles();
+			for (File f: algoFiles){
+				String name = f.getName();
+				if (!name.equals("Algorithm.java")){
+					allAlgorithms.add((Algorithm) Class.forName("algorithms."+name.substring(0, name.length()-5)).newInstance());
+					name = allAlgorithms.get(allAlgorithms.size()-1).getName();
+					if (name == null) throw new Exception();
+					algoNames.add(name);
+				}
+			}
+		}
+		catch (Exception e){
+			System.out.println("ADD ONLY ALGORITHMS THAT EXTEND ALGORITHM IN algorithms FOLDER");
+			System.out.println("MAKE SURE VALID NAME FOR ALGO: NOT NULL");
+			e.printStackTrace();
+		}
+		algorithmList = new JComboBox<String>();
+		for (String s: algoNames) algorithmList.addItem(s);
+		algorithmList.setSelectedIndex(0);
+		algorithmList.setBackground(Color.WHITE);
+		algorithmList.setFont(new Font("Arial", Font.PLAIN, 20));
+		algorithmList.setForeground(Color.RED);
+		algorithmList.setBorder(new LineBorder(Color.RED, 5, true));
+		width = GUIPanel.HEIGHT+(GUIPanel.WIDTH - GUIPanel.HEIGHT - COMBOBOX_WIDTH)/2;
+		algorithmList.setBounds(width, GUIPanel.HEIGHT/2-COMBOBOX_HEIGHT/2+50, COMBOBOX_WIDTH, COMBOBOX_HEIGHT);
+		algorithmList.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JComboBox b = (JComboBox) e.getSource();
+				String name = (String) b.getSelectedItem();
+				
+				for (int i = 0; i<algoNames.size(); i++){
+					if (algoNames.get(i).equals(name)){
+						changeAlgorithm(i);
+						return;
+					}
+				}
+			}
+		});
+		add(algorithmList);
+		algorithm = allAlgorithms.get(0);
 		algorithm.setMouse(mouse);
+		
 		
 		//gui
 		//button
@@ -115,7 +166,7 @@ public class MazePanel extends JPanel implements Runnable{
 		restart.setForeground(Color.RED);
 		restart.setBorder(new LineBorder(Color.RED, 5, true));
 		width = GUIPanel.HEIGHT+(GUIPanel.WIDTH - GUIPanel.HEIGHT - BUTTON_WIDTH)/2;
-		restart.setBounds(width, GUIPanel.HEIGHT/2-BUTTON_HEIGHT/2+100, BUTTON_WIDTH, BUTTON_HEIGHT);
+		restart.setBounds(width, GUIPanel.HEIGHT/2-BUTTON_HEIGHT/2+150, BUTTON_WIDTH, BUTTON_HEIGHT);
 		restart.setFocusPainted(false);
 		restart.addActionListener(new ActionListener() {
 			
@@ -244,6 +295,16 @@ public class MazePanel extends JPanel implements Runnable{
 		mouse.render((Graphics2D) g);
 	}
 	
+	/**
+	 * 
+	 * @param index
+	 */
+	public void changeAlgorithm (int index){
+		mouse.stopAllActions();
+		algorithm = allAlgorithms.get(index);
+		reset();
+	}
+	
 	
 	/**
 	 * 
@@ -252,9 +313,7 @@ public class MazePanel extends JPanel implements Runnable{
 	public void changeMaze (int index){
 		mouse.stopAllActions();
 		maze = storage.getMaze(index);
-		mouse = new Mouse(maze);
-		algorithm.reset();
-		algorithm.setMouse(mouse);
+		reset();
 	}
 	
 	/**

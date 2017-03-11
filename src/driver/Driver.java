@@ -17,12 +17,8 @@ public class Driver {
 	 * Create an object of your new algorithm and store it in algo
 	 * @param args
 	 */
-	public static void main (String args []){
-		//initialize algorithm wanted
-		Algorithm algo = new TrialAlgo (); 
-		
-		
-		new GUIFrame(algo);
+	public static void main (String args []){		
+		new GUIFrame();
 	}
 
 }

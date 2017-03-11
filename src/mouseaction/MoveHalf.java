@@ -1,3 +1,9 @@
+/**
+ * Moves the mouse half a cell in the direction
+ * it is facing when update is called regularly
+ * 
+ * @author Akshay
+ */
 package mouseaction;
 
 import static maze.Cell.CELL_SIZE;
@@ -21,12 +27,23 @@ public class MoveHalf extends MouseAction{
 	//velocity in x and y
 	private double xVelocity;
 	private double yVelocity;
-		
+	
+	/**
+	 * Instantiates a MoveHalf object that moves the mouse one half a cell
+	 * 
+	 * @param mouse Mouse object used to update Mouse motion
+	 */
 	public MoveHalf (Mouse mouse) {
 		super (mouse);
 	}
 		
-		
+	/**
+	 * called when it is "this" turn in the MouseAction
+	 * list within the Mouse object
+	 * 
+	 * Make sure the current position and angle are used
+	 * before the update functions start updating position
+	 */
 	public void init () {
 		//x and y velocity
 		yVelocity = mouse.getVelocity()*Math.sin(Math.toRadians(mouse.getAngle()));
@@ -80,44 +97,45 @@ public class MoveHalf extends MouseAction{
 			if (yDistTraveled<0) yDistTraveled = -1*yDist;
 			else yDistTraveled = yDist;
 		}
-			
+		
+		//sets mouse position
 		mouse.setX(origX+(int)xDistTraveled);
 		mouse.setY(origY+(int)yDistTraveled);
 			
 			
-			
+		//after mouse position is at specified ones, row and col are updated	
 		if ((int)Math.abs(xDistTraveled) == xDist && (int)Math.abs(yDistTraveled) == yDist){
-			/*
+			
 			switch (mouse.getAngle()){
 			case 0: 
-				mouse.setCol(mouse.getCol()+steps);
+				mouse.setCol(mouse.getCol()+0.5);
 				break;
 			case 45:
-				mouse.setCol(mouse.getCol()+steps);
-				mouse.setRow(mouse.getRow()+steps);
+				mouse.setCol(mouse.getCol()+0.5);
+				mouse.setRow(mouse.getRow()+0.5);
 				break;
 			case 90:
-				mouse.setRow(mouse.getRow()+steps);
+				mouse.setRow(mouse.getRow()+0.5);
 				break;
 			case 135:
-				mouse.setCol(mouse.getCol()-steps);
-				mouse.setRow(mouse.getRow()+steps);
+				mouse.setCol(mouse.getCol()-0.5);
+				mouse.setRow(mouse.getRow()+0.5);
 				break;
 			case 180:
-				mouse.setCol(mouse.getCol()-steps);
+				mouse.setCol(mouse.getCol()-0.5);
 				break;
 			case 225:
-				mouse.setCol(mouse.getCol()-steps);
-				mouse.setRow(mouse.getRow()-steps);
+				mouse.setCol(mouse.getCol()-0.5);
+				mouse.setRow(mouse.getRow()-0.5);
 				break;
 			case 270:
-				mouse.setRow(mouse.getRow()-steps);
+				mouse.setRow(mouse.getRow()-0.5);
 				break;
 			case 315:
-				mouse.setCol(mouse.getCol()+steps);
-				mouse.setRow(mouse.getRow()-steps);
+				mouse.setCol(mouse.getCol()+0.5);
+				mouse.setRow(mouse.getRow()-0.5);
 				break;
-			}*/
+			}
 			finished = true;
 		}
 				

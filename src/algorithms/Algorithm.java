@@ -47,6 +47,18 @@ public abstract class Algorithm{
 	}
 	
 	/**
+	 * MUST SPECIFY THE NAME OF THE ALGORITHM
+	 * 
+	 * THIS ALLOWS TO CHOOSE DIFFERENT ALGORITHMS
+	 * MAKE SURE EACH ALGORITHM RETURNS A UNIQUE STRING
+	 * IF TWO NAMES ARE THE SAME THEN IT WILL BE PRONE TO ERRORS
+	 * 
+	 * 
+	 * @return THE NAME OF THE ALGORITHMS
+	 */
+	public abstract String getName ();
+	
+	/**
 	 * THIS IS WHERE MAZE ASPECTS SHOULD BE SETUP
 	 * 
 	 * the user can implement any aspect of the maze here
@@ -95,6 +107,9 @@ public abstract class Algorithm{
 	/**
 	 * READS ALL THE WALLS. CALL THIS TO KNOW IF THERE ARE WALLS
 	 * REMEMBER THE MOUSE DOESN'T AUTOMATICALLY ADJUST FOR ORIENTATION
+	 * 
+	 * IF THE MOUSE IS NOT FULLY IN A CELL (HALF/INBETWEEN TWO CELLS)
+	 * ERROR WILL SHOW
 	 * 
 	 * user calls method to read the walls in the cell around the mouse
 	 * the read is not adjusted to orientation. If the mouse is facing 
@@ -247,5 +262,121 @@ public abstract class Algorithm{
 	public void setMouse (Mouse mouse){
 		this.mouse = mouse;
 	}
-
+	
+	/**
+	 * ONLY USED FOR DEBUGGING AND CHECKING IF WALL READS ARE CORRECT
+	 * 
+	 * 
+	 * 
+	 * @param mazeVisited
+	 * @param leftWalls
+	 * @return
+	 */
+	public boolean checkLeftWallMismatch (boolean [][] mazeVisited, boolean [][] leftWalls){
+		boolean correct = true;
+		for (int r = 0; r<16; r++){
+			for (int c=0; c<16; c++){
+				if (mazeVisited[r][c]){
+					if ((!leftWalls[r][c] || !mouse.mazeLeftWall(r, c)) && (leftWalls[r][c] || mouse.mazeLeftWall(r, c))){
+						correct = false;
+						System.out.println("LEFT WALL MISMATCH AT: ("+r+","+c+")");
+					}
+					
+				}
+				if(leftWalls[r][c] && !mouse.mazeLeftWall(r, c)){
+					correct = false;
+					System.out.println("LEFT WALL MISMATCH (NOT VISITED) AT: ("+r+","+c+")");
+				}
+			}
+		}
+		
+		return correct;
+	}
+	
+	/**
+	 * ONLY USED FOR DEBUGGING AND CHECKING IF WALL READS ARE CORRECT
+	 * 
+	 * @param mazeVisited
+	 * @param rightWalls
+	 * @return
+	 */
+	public boolean checkRightWallMismatch (boolean [][] mazeVisited, boolean [][] rightWalls){
+		boolean correct = true;
+		for (int r = 0; r<16; r++){
+			for (int c=0; c<16; c++){
+				if (mazeVisited[r][c]){
+					if ((!rightWalls[r][c] || !mouse.mazeRightWall(r, c)) && (rightWalls[r][c] || mouse.mazeRightWall(r, c))){
+						correct = false;
+						System.out.println("RIGHT WALL MISMATCH AT: ("+r+","+c+")");
+					}
+					
+				}
+				if(rightWalls[r][c] && !mouse.mazeRightWall(r, c)){
+					correct = false;
+					System.out.println("RIGHT WALL MISMATCH (NOT VISITED) AT: ("+r+","+c+")");
+				}
+				
+			}
+		}
+		
+		return correct;
+	}
+	
+	/**
+	 * ONLY USED FOR DEBUGGING AND CHECKING IF WALL READS ARE CORRECT
+	 * 
+	 * @param mazeVisited
+	 * @param topWalls
+	 * @return
+	 */
+	public boolean checkTopWallMismatch (boolean [][] mazeVisited, boolean [][] topWalls){
+		boolean correct = true;
+		for (int r = 0; r<16; r++){
+			for (int c=0; c<16; c++){
+				if (mazeVisited[r][c]){
+					if ((!topWalls[r][c] || !mouse.mazeTopWall(r, c)) && (topWalls[r][c] || mouse.mazeTopWall(r, c))){
+						correct = false;
+						System.out.println("TOP WALL MISMATCH AT: ("+r+","+c+")");
+					}
+					
+				}
+				if(topWalls[r][c] && !mouse.mazeTopWall(r, c)){
+					correct = false;
+					System.out.println("TOP WALL MISMATCH (NOT VISITED) AT: ("+r+","+c+")");
+				}
+				
+			}
+		}
+		
+		return correct;
+	}
+	
+	/**
+	 * ONLY USED FOR DEBUGGING AND CHECKING IF WALL READS ARE CORRECT
+	 * 
+	 * @param mazeVisited
+	 * @param bottomWalls
+	 * @return
+	 */
+	public boolean checkBottomWallMismatch (boolean [][] mazeVisited, boolean [][] bottomWalls){
+		boolean correct = true;
+		for (int r = 0; r<16; r++){
+			for (int c=0; c<16; c++){
+				if (mazeVisited[r][c]){
+					if ((!bottomWalls[r][c] || !mouse.mazeDownWall(r, c)) && (bottomWalls[r][c] || mouse.mazeDownWall(r, c))){
+						correct = false;
+						System.out.println("BOTTOM WALL MISMATCH AT: ("+r+","+c+")");
+					}
+					
+				}
+				if(bottomWalls[r][c] && !mouse.mazeDownWall(r, c)){
+					correct = false;
+					System.out.println("BOTTOM WALL MISMATCH (NOT VISITED) AT: ("+r+","+c+")");
+				}
+				
+			}
+		}
+		
+		return correct;
+	}
 }

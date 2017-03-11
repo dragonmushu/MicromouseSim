@@ -18,7 +18,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import algorithms.Algorithm;
 import maze.MazeStorage;
 import mazecreate.CreatePanel;
 
@@ -40,8 +39,6 @@ public class GUIPanel extends JPanel{
 	private JButton create;
 	private JButton maze;
 	
-	//Algorithm 
-	private Algorithm algo;
 	
 	/**
 	 * 
@@ -52,11 +49,9 @@ public class GUIPanel extends JPanel{
 	 * COLOR SCHEME : RED and WHITE
 	 * 
 	 * @param frame used to change between different panels
-	 * @param algo  if the user selects to run simulation
 	 */
-	public GUIPanel (JFrame frame, Algorithm algo) {
+	public GUIPanel (JFrame frame) {
 		this.frame = frame;
-		this.algo = algo;
 		setPreferredSize (new Dimension(WIDTH, HEIGHT));
 		setLayout(null);
 		setBackground(Color.WHITE);
@@ -124,7 +119,7 @@ public class GUIPanel extends JPanel{
 	 */
 	public boolean changeToMaze (){
 		MazeStorage storage = new MazeStorage();
-		frame.setContentPane(new MazePanel(storage, algo));
+		frame.setContentPane(new MazePanel(storage));
 		frame.pack();
 		frame.getContentPane().setFocusable(true);
 		frame.getContentPane().requestFocus();
